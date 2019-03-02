@@ -17,7 +17,7 @@ const char GameBox[10][30]={
     "+-----+-----+-----+-----+\n",
 };
 int Num[4][4],num[4][4];
-int Color[11]={0,1,1,2,2,3,3,4,4,5,5};
+int Color[12]={0,1,1,2,2,3,3,4,4,5,5,6};
 void Color_init(){
 	for(int i=1;i<8;i++)
 		init_pair(i,i,0);
@@ -169,7 +169,7 @@ int main(){
 
 	    if(win){
 	    	attron(COLOR_PAIR(8));
-	    	mvprintw(4,8,"You Win");
+	    	mvprintw(4,9,"You Win");
 	    	attroff(COLOR_PAIR(8));
 	    }
 	    else if(lose){
