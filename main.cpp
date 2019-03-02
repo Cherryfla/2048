@@ -15,7 +15,7 @@ const char GameBox[10][30]={
     "|     |     |     |     |\n",
     "+-----+-----+-----+-----+\n",
 };
-int Num[4][4];
+int Num[4][4],num[4][4];
 void GetNewNumber(){	//生成新数字
 	int x=rand()%4,y=rand()%4;
 	while(Num[x][y]!=0){
@@ -30,8 +30,10 @@ void MoveRight(){		//数字右移
 			if(Num[i][j]!=0)
 				continue;
 			for(int k=j-1;k>=0;k--)
-				if(Num[i][k]!=0)
+				if(Num[i][k]!=0){
 					swap(Num[i][j],Num[i][k]);
+					break;
+				}
 		}
 	}
 }
@@ -41,8 +43,10 @@ void MoveLeft(){		//数字左移
 			if(Num[i][j]!=0)
 				continue;
 			for(int k=j+1;k<4;k++)
-				if(Num[i][k]!=0)
+				if(Num[i][k]!=0){
 					swap(Num[i][j],Num[i][k]);
+					break;
+				}
 		}
 	}
 }
@@ -52,8 +56,10 @@ void MoveDown(){		//数字下移
 			if(Num[i][j]!=0)
 				continue;
 			for(int k=i-1;k>=0;k--)
-				if(Num[k][j]!=0)
+				if(Num[k][j]!=0){
 					swap(Num[i][j],Num[k][j]);
+					break;
+				}
 		}
 	}
 }
@@ -63,8 +69,10 @@ void MoveUp(){			//数字上移
 			if(Num[i][j]!=0)
 				continue;
 			for(int k=i+1;k<4;k++)
-				if(Num[k][j]!=0)
+				if(Num[k][j]!=0){
 					swap(Num[i][j],Num[k][j]);
+					break;
+				}
 		}
 	}
 }
@@ -84,6 +92,9 @@ int main(){
     while(key!=ERR&&key!='q'){
     	// move(40,40);
     	// printw("%d %d\n",key,KEY_RIGHT);
+
+    	memcpy(num,Num,sizeof(Num));
+
 	    if(key==KEY_RIGHT){		//按右键
 	    	MoveRight();
 	    	for(int j=3;j>=1;j--)
@@ -102,22 +113,27 @@ int main(){
 	    }
 	    else if(key==KEY_UP){	//按上键
 	    	MoveUp();
-	    	for(int i=3;i>=1;i--)
-	    		for(int j=0;j<4;j++)
-	    			if(Num[i][j]==Num[i-1][j])
-	    				Num[i][j]<<=1,Num[i-1][j]=0;
-	    	MoveUp();
-	    }
-	    else if(key==KEY_DOWN){	//按下键
-	    	MoveDown();
 	    	for(int i=0;i<3;i++)
 	    		for(int j=0;j<4;j++)
 	    			if(Num[i][j]==Num[i+1][j])
 	    				Num[i][j]<<=1,Num[i+1][j]=0;
+	    	MoveUp();
+	    }
+	    else if(key==KEY_DOWN){	//按下键
+	    	MoveDown();
+	    	for(int i=3;i>0;i--)
+	    		for(int j=0;j<4;j++)
+	    			if(Num[i][j]==Num[i-1][j])
+	    				Num[i][j]<<=1,Num[i-1][j]=0;
 	    	MoveDown();
 	    }
-
-	    GetNewNumber();
+	    int Changed=0;
+	    for(int i=0;i<4;i++)
+	    	for(int j=0;j<4;j++)
+	    		if(Num[i][j]!=num[i][j])
+	    			Changed=1;
+	    if(Changed)			//如果所有数字都没有移动，就不再生成新数字	
+	    	GetNewNumber();
 	    erase();
 	    move(0,0);
 	   	for(int i=0;i<9;i++)
